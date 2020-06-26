@@ -1,3 +1,4 @@
+import 'package:chat_app/screen/chat_screen.dart';
 import 'package:chat_app/screen/login.dart';
 import 'package:chat_app/screen/chat_users.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (context) => Login(),
-          '/chat_users': (context) => ChatUsers()
+          '/chat_users': (context) => ChatUsers(),
+          '/chat': (context) => ChatScreen()
         }
         //home: MyHomePage(title: 'Flutter Demo Home Page'),
         );

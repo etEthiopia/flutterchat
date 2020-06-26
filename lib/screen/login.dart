@@ -13,38 +13,36 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Let's Chat"),
-      ),
-      body: Container(
+        appBar: AppBar(
+          title: Text("Let's Chat"),
+        ),
+        body: Container(
           alignment: Alignment.center,
           padding: EdgeInsets.all(30.0),
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  controller: _usernameController,
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: EdgeInsets.all(20.0),
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)))),
-                ),
-                SizedBox(
-                  height: 20.0,
-                ),
-                OutlineButton(
-                    child: Text("Login"),
-                    onPressed: () {
-                      _loginBtnTap();
-                    })
-              ],
-            ),
-          )),
-    );
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextField(
+                controller: _usernameController,
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.all(20.0),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)))),
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
+              OutlineButton(
+                  child: Text("Login"),
+                  onPressed: () {
+                    _loginBtnTap();
+                  })
+            ],
+          ),
+        ));
   }
 
   void _loginBtnTap() {

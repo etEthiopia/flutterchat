@@ -5,6 +5,8 @@ class Global {
 
   static User loggedUser;
 
+  static User toChatUser;
+
   static void initDummyUsers() {
     User userA = User(id: 1000, name: "David De Gea", email: "degea@gmail.com");
     User userB = User(

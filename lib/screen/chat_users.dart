@@ -41,6 +41,9 @@ class _ChatUsersState extends State<ChatUsers> {
                   itemBuilder: (context, index) {
                     User user = _chatUsers[index];
                     return ListTile(
+                        onTap: () {
+                          _openChatScreen(user);
+                        },
                         title: Text(user.name),
                         subtitle: Text("ID: ${user.id}, Email: ${user.email}"));
                   },
@@ -58,5 +61,10 @@ class _ChatUsersState extends State<ChatUsers> {
 
   _openLoginScreen() async {
     await Navigator.pushReplacementNamed(context, '/login');
+  }
+
+  _openChatScreen(User user) async {
+    Global.toChatUser = user;
+    await Navigator.pushNamed(context, '/chat');
   }
 }
