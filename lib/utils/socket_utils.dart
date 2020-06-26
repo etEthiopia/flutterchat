@@ -43,4 +43,41 @@ class SocketUtils {
         transports: [Transports.WEB_SOCKET],
         query: userMap);
   }
+
+  SetOnConnectionListener(Function onConnect) {
+    _socket.onConnect((data) {
+      onConnect(data);
+    });
+  }
+
+  SetOnConnectionErrorTimeOutListener(Function onConnectionTimeout) {
+    _socket.onConnectTimeout((data) {
+      onConnectionTimeout(data);
+    });
+  }
+
+  SetOnConnectionErrorListener(Function onConnectionError) {
+    _socket.onConnectError((data) {
+      onConnectionError(data);
+    });
+  }
+
+  SetOnErrorListener(Function onError) {
+    _socket.onError((data) {
+      onError(data);
+    });
+  }
+
+  SetOnDisconnectListener(Function onDisconnect) {
+    _socket.onDisconnect((data) {
+      onDisconnect(data);
+    });
+  }
+
+  closeConnection() {
+    if (null != _socket) {
+      print("Closing Connection");
+      _iomanager.clearInstance(_socket);
+    }
+  }
 }
