@@ -50,26 +50,29 @@ class _ChatUsersState extends State<ChatUsers> {
           alignment: Alignment.center,
           padding: EdgeInsets.all(30.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
+              Text(_connectedToSocket ? 'Connected' : _errorConnectMessage),
+              SizedBox(
+                height: 20.0,
+              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: _chatUsers.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (_, index) {
                     User user = _chatUsers[index];
-                    return ListTile(
-                        onTap: () {
-                          _openChatScreen(user);
-                        },
-                        title: Text(user.name),
-                        subtitle: Text("ID: ${user.id}, Email: ${user.email}"));
-                  },
+                    return GestureDetector(
+                    onTap: () {
+                      Global.toChatUser = user;
+                      _openChatScreen();
+                    },
+                    child: ListTile(
+                      title: Text(user.name),
+                      subtitle: Text('ID: ${user.id}, ${user.email}'),
+                    ),
+                  );
                 ),
               )
-              // Expanded(child: ListView.builder(itemCount: _chatUsers.length,
-              // itemBuilder: (context, index),
-              // ){
-              //   User user = _chatUsers(index);
-              // },)
             ],
           )),
     );
@@ -80,6 +83,13 @@ class _ChatUsersState extends State<ChatUsers> {
     setState(() {
       _connectedToSocket = false;
       _errorConnectMessage = 'Failed to Connect';
+    });
+  }
+
+  onConnect(data) {
+    print('Connected $data');
+    setState(() {
+      _connectedToSocket = true;
     });
   }
 
@@ -111,8 +121,7 @@ class _ChatUsersState extends State<ChatUsers> {
     await Navigator.pushReplacementNamed(context, '/login');
   }
 
-  _openChatScreen(User user) async {
-    Global.toChatUser = user;
+  _openChatScreen() async {
     await Navigator.pushNamed(context, '/chat');
   }
 }
