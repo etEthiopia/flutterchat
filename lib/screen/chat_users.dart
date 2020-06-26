@@ -22,14 +22,16 @@ class _ChatUsersState extends State<ChatUsers> {
   }
 
   _connectToSocket() {
-    print("Connecting, Logged In User: ${Global.loggedUser.name}");
-    Global.initSocket();
-    Global.socketUtils.initSocket(fromUser: Global.loggedUser);
-    Global.socketUtils.connectToSocket();
-    Global.socketUtils.SetOnConnectionListener(onConnect);
-    Global.socketUtils.SetOnDisconnectListener(onDisconnect);
-    Global.socketUtils.SetOnErrorListener(onError);
-    Global.socketUtils.SetOnConnectionErrorListener(onConnectError);
+    Future.delayed(Duration(seconds: 2), () async {
+      print("Connecting, Logged In User: ${Global.loggedUser.name}");
+      Global.initSocket();
+      Global.socketUtils.initSocket(fromUser: Global.loggedUser);
+      Global.socketUtils.connectToSocket();
+      Global.socketUtils.SetOnConnectionListener(onConnect);
+      Global.socketUtils.SetOnDisconnectListener(onDisconnect);
+      Global.socketUtils.SetOnErrorListener(onError);
+      Global.socketUtils.SetOnConnectionErrorListener(onConnectError);
+    });
   }
 
   @override
@@ -58,20 +60,20 @@ class _ChatUsersState extends State<ChatUsers> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _chatUsers.length,
-                  itemBuilder: (_, index) {
-                    User user = _chatUsers[index];
-                    return GestureDetector(
-                    onTap: () {
-                      Global.toChatUser = user;
-                      _openChatScreen();
-                    },
-                    child: ListTile(
-                      title: Text(user.name),
-                      subtitle: Text('ID: ${user.id}, ${user.email}'),
-                    ),
-                  );
-                ),
+                    itemCount: _chatUsers.length,
+                    itemBuilder: (_, index) {
+                      User user = _chatUsers[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Global.toChatUser = user;
+                          _openChatScreen();
+                        },
+                        child: ListTile(
+                          title: Text(user.name),
+                          subtitle: Text('ID: ${user.id}, ${user.email}'),
+                        ),
+                      );
+                    }),
               )
             ],
           )),
