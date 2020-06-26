@@ -9,11 +9,27 @@ class ChatUsers extends StatefulWidget {
 
 class _ChatUsersState extends State<ChatUsers> {
   List<User> _chatUsers;
+  bool _connectedToSocket;
+  String _errorConnectMessage;
 
   @override
   void initState() {
     super.initState();
     _chatUsers = Global.getUsersFor(Global.loggedUser);
+    _errorConnectMessage = 'Connecting...';
+    _connectedToSocket = false;
+    _connectToSocket();
+  }
+
+  _connectToSocket() {
+    print("Connecting, Logged In User: ${Global.loggedUser.name}");
+    Global.initSocket();
+    Global.socketUtils.initSocket(fromUser: Global.loggedUser);
+    Global.socketUtils.connectToSocket();
+    Global.socketUtils.SetOnConnectionListener(onConnect);
+    Global.socketUtils.SetOnDisconnectListener(onDisconnect);
+    Global.socketUtils.SetOnErrorListener(onError);
+    Global.socketUtils.SetOnConnectionErrorListener(onConnectError);
   }
 
   @override
@@ -57,6 +73,38 @@ class _ChatUsersState extends State<ChatUsers> {
             ],
           )),
     );
+  }
+
+  onConnectError(data) {
+    print('onConnectError $data');
+    setState(() {
+      _connectedToSocket = false;
+      _errorConnectMessage = 'Failed to Connect';
+    });
+  }
+
+  onConnectTimeout(data) {
+    print('onConnectTimeout $data');
+    setState(() {
+      _connectedToSocket = false;
+      _errorConnectMessage = 'Connection timedout';
+    });
+  }
+
+  onError(data) {
+    print('onError $data');
+    setState(() {
+      _connectedToSocket = false;
+      _errorConnectMessage = 'Connection Failed';
+    });
+  }
+
+  onDisconnect(data) {
+    print('onDisconnect $data');
+    setState(() {
+      _connectedToSocket = false;
+      _errorConnectMessage = 'Disconnected';
+    });
   }
 
   _openLoginScreen() async {

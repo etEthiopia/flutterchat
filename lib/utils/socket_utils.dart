@@ -34,6 +34,14 @@ class SocketUtils {
     _socket = await _iomanager.createInstance(_socketOptions());
   }
 
+  connectToSocket() {
+    if (null == _socket) {
+      print("Socket is null");
+      return;
+    }
+    _socket.connect();
+  }
+
   _socketOptions() {
     final Map<String, String> userMap = {
       'from': _fromUser.id.toString(),
