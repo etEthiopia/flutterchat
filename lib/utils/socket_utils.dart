@@ -4,7 +4,7 @@ import 'package:chat_app/model/user.dart';
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 
 class SocketUtils {
-  static String _serverIP = "http://192.168.1.3";
+  static String _serverIP = "http://192.168.1.4";
   static const int _port = 3000;
 
   static String _connectionURL = "$_serverIP:$_port";
@@ -27,6 +27,7 @@ class SocketUtils {
   initSocket({User fromUser}) async {
     this._fromUser = fromUser;
     print("Connecting... ${fromUser.name}");
+    await _init();
   }
 
   _init() async {
@@ -84,8 +85,12 @@ class SocketUtils {
 
   closeConnection() {
     if (null != _socket) {
-      print("Closing Connection");
-      _iomanager.clearInstance(_socket);
+      try {
+        print("Closing Connection " + "");
+        _iomanager.clearInstance(_socket);
+      } catch (err) {
+        print(err.toString());
+      }
     }
   }
 }

@@ -25,7 +25,7 @@ class _ChatUsersState extends State<ChatUsers> {
     Future.delayed(Duration(seconds: 2), () async {
       print("Connecting, Logged In User: ${Global.loggedUser.name}");
       Global.initSocket();
-      Global.socketUtils.initSocket(fromUser: Global.loggedUser);
+      await Global.socketUtils.initSocket(fromUser: Global.loggedUser);
       Global.socketUtils.connectToSocket();
       Global.socketUtils.SetOnConnectionListener(onConnect);
       Global.socketUtils.SetOnDisconnectListener(onDisconnect);
@@ -120,6 +120,7 @@ class _ChatUsersState extends State<ChatUsers> {
   }
 
   _openLoginScreen() async {
+    Global.socketUtils.closeConnection();
     await Navigator.pushReplacementNamed(context, '/login');
   }
 
