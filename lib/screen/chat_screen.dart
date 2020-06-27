@@ -1,3 +1,4 @@
+import 'package:chat_app/utils/socket_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/global.dart';
 import 'package:chat_app/model/user.dart';
@@ -10,7 +11,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _textController = TextEditingController();
   List<Chat> _chatMessages;
   User _toChatUser;
   UserStatus _userStatus;
@@ -47,13 +48,28 @@ class _ChatScreenState extends State<ChatScreen> {
         ));
   }
 
+  sendMessageBtnTap() async {
+    if (_textController.text.isEmpty) {
+      return;
+    }
+    Chat chat = Chat(
+        chatId: 0,
+        to: _toChatUser.id,
+        toUserOnlineStatus: false,
+        message: _textController.text,
+        chatType: SocketUtils.SINGLE_CHAT);
+    Global.socketUtils.sendSingleChatMessage(chat);
+
+    print("Sending message to ${_toChatUser.name}, id: ${_toChatUser.id}");
+  }
+
   void _ChatScreenBtnTap() {
-    if (_usernameController.text.isEmpty) {
+    if (_textController.text.isEmpty) {
       return;
     }
     Global.initDummyUsers();
     User me = Global.dummyUsers[0];
-    if (_usernameController.text != 'a') {
+    if (_textController.text != 'a') {
       me = Global.dummyUsers[1];
     }
 
@@ -71,7 +87,11 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Row(
         children: <Widget>[
           _chatTextArea(),
-          IconButton(icon: Icon(Icons.send), onPressed: () {})
+          IconButton(
+              icon: Icon(Icons.send),
+              onPressed: () async {
+                await sendMessageBtnTap();
+              })
         ],
       ),
     );
@@ -80,6 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
   _chatTextArea() {
     return Expanded(
       child: TextField(
+        controller: _textController,
         autocorrect: true,
         decoration: InputDecoration(
             enabledBorder:

@@ -12,13 +12,14 @@ class SocketUtils {
   //Events
   static const String _ON_MESSAGE_RECEIVED = "receive_message";
   static const String _IS_USER_ONLINE_EVENT = "check_status";
+  static const String EVENT_SINGLE_CHAT_MESSAGE = "single_chat_message";
 
   //Status
   static const int STATUS_MESSAGE_NOT_SENT = 10001;
   static const int STATUS_MESSAGE_SENT = 10002;
 
   //Type of chat
-  static const String SINGLE_CHAT = 'single';
+  static const String SINGLE_CHAT = 'single_chat';
 
   User _fromUser;
   SocketIO _socket;
@@ -51,6 +52,14 @@ class SocketUtils {
         enableLogging: true,
         transports: [Transports.WEB_SOCKET],
         query: userMap);
+  }
+
+  sendSingleChatMessage(Chat chat) {
+    if (_socket != null) {
+      print("Cannot Send Message");
+      return;
+    }
+    _socket.emit(EVENT_SINGLE_CHAT_MESSAGE, [chat.toJson()]);
   }
 
   SetOnConnectionListener(Function onConnect) {
