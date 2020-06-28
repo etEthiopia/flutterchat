@@ -14,6 +14,7 @@ class SocketUtils {
   static const String _ON_MESSAGE_RECEIVED = "receive_message";
   static const String _IS_USER_ONLINE_EVENT = "check_status";
   static const String EVENT_SINGLE_CHAT_MESSAGE = "single_chat_message";
+  static const String EVENT_USER_ONLINE = "is_user_connected";
 
   //Status
   static const int STATUS_MESSAGE_NOT_SENT = 10001;
@@ -98,6 +99,22 @@ class SocketUtils {
     _socket.onDisconnect((data) {
       onDisconnect(data);
     });
+  }
+
+  setOnlineUserStatusListener(Function onUserStatus) {
+    _socket.on(EVENT_USER_ONLINE, (data) {
+      onUserStatus(data);
+    });
+  }
+
+  checkOnline(Chat chm) {
+    print("Checking Online User: ${chm.to}");
+    if (_socket == null) {
+      print("Cannot check online");
+      return;
+    }
+
+    _socket.emit(_IS_USER_ONLINE_EVENT, [chm.toJson()]);
   }
 
   closeConnection() {

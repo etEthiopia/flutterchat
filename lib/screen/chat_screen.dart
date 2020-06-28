@@ -23,6 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _userStatus = UserStatus.connecting;
     _chatMessages = List();
     _initSocketListeners();
+    _checkOnline();
   }
 
   @override
@@ -68,6 +69,30 @@ class _ChatScreenState extends State<ChatScreen> {
 
   _initSocketListeners() async {
     Global.socketUtils.setOnChatMessageReceiveListener(onChatMessageReceived);
+    Global.socketUtils.setOnlineUserStatusListener(onUserStatus);
+  }
+
+  onUserStatus(data) {
+    print("onUserStatus $data");
+    Chat chm = Chat.fromJson(data);
+    setState(() {
+      if (chm.toUserOnlineStatus) {
+        _userStatus =
+            chm.toUserOnlineStatus ? UserStatus.online : UserStatus.offline;
+      }
+    });
+  }
+
+  _checkOnline() {
+    Chat chat = Chat(
+        chatId: 0,
+        to: _toChatUser.id,
+        from: Global.loggedUser.id,
+        toUserOnlineStatus: false,
+        message: '',
+        chatType: SocketUtils.SINGLE_CHAT);
+    Global.socketUtils.checkOnline(chat);
+    print("emitted");
   }
 
   onChatMessageReceived(data) {
