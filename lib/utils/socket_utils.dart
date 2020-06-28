@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:chat_app/global.dart';
 import 'package:chat_app/model/chat.dart';
 import 'package:chat_app/model/user.dart';
 import 'package:adhara_socket_io/adhara_socket_io.dart';
@@ -55,11 +56,18 @@ class SocketUtils {
   }
 
   sendSingleChatMessage(Chat chat) {
-    if (_socket != null) {
+    if (_socket == null) {
       print("Cannot Send Message");
       return;
     }
     _socket.emit(EVENT_SINGLE_CHAT_MESSAGE, [chat.toJson()]);
+  }
+
+  setOnChatMessageReceiveListener(Function onMessageReceived) {
+    print("socmrl");
+    _socket.on(_ON_MESSAGE_RECEIVED, (data) {
+      onMessageReceived(data);
+    });
   }
 
   SetOnConnectionListener(Function onConnect) {

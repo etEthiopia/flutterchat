@@ -22,6 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _toChatUser = Global.toChatUser;
     _userStatus = UserStatus.connecting;
     _chatMessages = List();
+    _initSocketListeners();
   }
 
   @override
@@ -55,12 +56,30 @@ class _ChatScreenState extends State<ChatScreen> {
     Chat chat = Chat(
         chatId: 0,
         to: _toChatUser.id,
+        from: Global.loggedUser.id,
         toUserOnlineStatus: false,
         message: _textController.text,
         chatType: SocketUtils.SINGLE_CHAT);
     Global.socketUtils.sendSingleChatMessage(chat);
 
     print("Sending message to ${_toChatUser.name}, id: ${_toChatUser.id}");
+    processMessage(chat);
+  }
+
+  _initSocketListeners() async {
+    Global.socketUtils.setOnChatMessageReceiveListener(onChatMessageReceived);
+  }
+
+  onChatMessageReceived(data) {
+    print("onChatMessageReceived $data");
+    Chat chatRec = Chat.fromJson(data);
+    processMessage(chatRec);
+  }
+
+  processMessage(Chat chatRec) {
+    setState(() {
+      _chatMessages.add(chatRec);
+    });
   }
 
   void _ChatScreenBtnTap() {
