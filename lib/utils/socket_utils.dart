@@ -5,7 +5,7 @@ import 'package:chat_app/model/user.dart';
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 
 class SocketUtils {
-  static String _serverIP = "http://192.168.1.4";
+  static String _serverIP = "http://192.168.1.2";
   static const int _port = 3000;
 
   static String _connectionURL = "$_serverIP:$_port";

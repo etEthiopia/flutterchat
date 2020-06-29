@@ -5,14 +5,14 @@ Chat chatFromJson(String str) => Chat.fromJson(json.decode(str));
 String chatToJson(Chat data) => json.encode(data.toJson());
 
 class Chat {
-  Chat({
-    this.chatId,
-    this.to,
-    this.from,
-    this.message,
-    this.chatType,
-    this.toUserOnlineStatus,
-  });
+  Chat(
+      {this.chatId,
+      this.to,
+      this.from,
+      this.message,
+      this.chatType,
+      this.toUserOnlineStatus,
+      this.isFromMe});
 
   int chatId;
   int to;
@@ -20,6 +20,7 @@ class Chat {
   String message;
   String chatType;
   bool toUserOnlineStatus;
+  bool isFromMe;
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
         chatId: json["chat_id"],
